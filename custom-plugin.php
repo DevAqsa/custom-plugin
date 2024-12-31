@@ -22,7 +22,7 @@ add_menu_page("Employee System | Employee Management System", "Employee System",
 
 
 //sub-menu
-add_submenu_page("employee-system", "Add Employee", "Add Employee" , "manage_options", "ems_add_employee", "ems_crud_system" );
+add_submenu_page("employee-system", "Add Employee", "Add Employee" , "manage_options", "employee-system", "ems_crud_system" );
 
 add_submenu_page("employee-system", "List Employee", "List Employee", "manage_options" , "list-employee", "ems_list_employee");
 }
