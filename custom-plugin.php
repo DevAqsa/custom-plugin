@@ -46,4 +46,70 @@ function ems_list_employee(){
 
 }
 
+
+register_activation_hook(__FILE__, "ems_create_table");
+
+function ems_create_table(){
+
+    global $wpdb;
+    $table_prefix = $wpdb->prefix; //wp_
+
+    $sql = 
+    "CREATE TABLE {$table_prefix}ems_form_data (
+        `id` int NOT NULL AUTO_INCREMENT PRIMARY KEY,
+        `name` varchar(120) NULL,
+        `email` varchar(80) NULL,
+        `phoneNo` varchar(50) NULL,
+        `gender` enum('Male','Female','Other') NULL,
+        `designation` varchar(50) NULL
+      )";
+
+      include_once ABSPATH. "wp-admin/includes/upgrade.php";
+
+dbdelta($sql);
+}
+
+//Plugin deactivation Hook
+
+register_Deactivation_hook(__FILE__, "ems_drop_table");
+
+function ems_drop_table(){
+
+    global $wpdb;
+
+    $table_prefix = $wpdb->prefix;
+
+    $sql = "DROP TABLE IF EXISTS {$table_prefix}ems_form_data"; //{$table_prefix}ems_form_data
+
+    $wpdb->query($sql);
+}
+
+//add CSS / JS to plugin
+
+add_action("admin_enqueue_scripts", "ems_add_plugin_assets");
+
+function ems_add_plugin_assets(){
+
+    //add CSS
+    wp_enqueue_style("ems-bootstrap-css", EMS_PLUGIN_URL."css/bootstrap.min.css",  array(), "1.0.0", "all");
+
+    wp_enqueue_style("ems-custom-css", EMS_PLUGIN_URL."css/custom.css",  array(), "1.0.0", "all");
+
+
+    wp_enqueue_style("ems-datatable-bootstrap", EMS_PLUGIN_URL."css/dataTables.dataTables.min.css",  array(), "1.0.0", "all");
+
+    //add js plugin files
+
+    wp_enqueue_script("ems-bootstrap-js", EMS_PLUGIN_URL."js/bootstrap.min.js", array("jquery"), "1.0.0");
+
+    wp_enqueue_script("ems-datatable-js", EMS_PLUGIN_URL."js/dataTables.min.js", array("jquery"), "1.0.0");
+
+    wp_enqueue_script("ems-custom-js", EMS_PLUGIN_URL."js/custom.js", array("jquery"), "1.0.0");
+
+    wp_enqueue_script("ems-validate-js", EMS_PLUGIN_URL."js/jquery.validate.min.js", array("jquery"), "1.0.0");
+
+
+
+}
+
 ?>

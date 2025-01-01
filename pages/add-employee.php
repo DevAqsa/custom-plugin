@@ -1,24 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>Add Employee</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  
-</head>
-<body>
+
  
 <div class="container">
 <h2>Add Employee</h2>
+
+<!-- <img src="<?php echo EMS_PLUGIN_URL ?>images/laptop.jpg" style="width:80px"/> -->
+
   <div class="panel panel-primary">
   
     <div class="panel-heading">Add Employee</div>
     <div class="panel-body">
-    <form action="/action_page.php">
+    <form action="/javascript:void(0)" method="post" id="ems-frm-add-employee" >
     <div class="form-group">
       <label for="name">Name:</label>
-      <input type="text" class="form-control" id="name" placeholder="Enter name" name="name">
+      <input type="text"  required class="form-control" id="name" placeholder="Enter name" name="name">
     </div>
     <div class="form-group">
       <label for="email">Email:</label>
@@ -52,7 +46,4 @@
   </div>
 </div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-</body>
-</html>
+
