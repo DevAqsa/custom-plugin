@@ -1,3 +1,14 @@
+<?php
+
+global $wpdb;
+
+$employees = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}ems_form_data", ARRAY_A);
+
+
+?>
+
+
+
 
 <div class="container">
   <h2>List Employee</h2>  
@@ -18,12 +29,18 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
-        <td>1</td>
-        <td>Aqsa</td>
-        <td>abc@example.com</td>
-        <td>FeMale</td>
-        <td>PHP developer</td>
+
+<?php
+
+if(count($employees) > 0){
+  foreach ($employees as $employee) {
+      ?>
+<tr>
+        <td> <?php echo $employee['id'] ?></td>
+        <td><?php echo $employee['name'] ?></td>
+        <td><?php echo $employee['email'] ?></td>
+        <td><?php echo $employee['gender'] ?></td>
+        <td><?php echo $employee['designation'] ?></td>
         <td>
             <button type="button" class="btn btn-warning">Edit</button>
             <button type="button" class="btn btn-primary">Update</button>
@@ -32,18 +49,18 @@
         </td>
 
       </tr>
+
+      <?php
+ } 
+}
+else{
+  echo "No employee found";
+}
+?>
      
     </tbody>
   </table>
 
   </div>
 </div>
-
-
- 
 </div>
-
-
-
-
-
