@@ -42,9 +42,11 @@ if(count($employees) > 0){
         <td><?php echo $employee['gender'] ?></td>
         <td><?php echo $employee['designation'] ?></td>
         <td>
-            <button type="button" class="btn btn-warning">Edit</button>
-            <button type="button" class="btn btn-primary">Update</button>
-            <button type="button" class="btn btn-danger">Delete</button>
+            <a href="admin.php?page=employee-system&action=edit&empId=<?php echo $employee['id'] ?>" type="button" class="btn btn-warning">Edit</a>
+            <a href="admin.php?page=employee-system&action=edit&empId=<?php echo $employee['id'] ?>" type="button" class="btn btn-success">Update</a>
+
+            <a href="admin.php?page=list-employee&action=delete&empId=<?php echo $employee['id'] ?>" type="button" class="btn btn-danger"  type="button" class="btn btn-danger">Delete</a>
+            <a href="admin.php?page=employee-system&action=view&empId=<?php echo $employee['id'] ?>" type="button" class="btn btn-primary" type="button" class="btn btn-primary">View</a>
 
         </td>
 
