@@ -1,87 +1,50 @@
 <?php
+$message = "";
+$status = "";
+$action = "";
+$empId = "";
+$employee_model = new Employee();
 
-  $message = "";
-  $status = "";
-  $action = "";
-  $empId = "";
-
-  // Find request for View and Edit
-  if(isset($_GET['action']) && isset($_GET['empId'])){
-
-    global $wpdb;
+// Find request for View and Edit
+if(isset($_GET['action']) && isset($_GET['empId'])) {
     $empId = $_GET['empId'];
-
-    // Action: Edit
-    if($_GET['action'] == "edit"){
-        $action = "edit";
-    }
-
-    // Action: View
-    if($_GET['action'] == "view"){
-        $action = "view";
-    }
-
+    
+    // Action: Edit or View
+    $action = $_GET['action'];
+    
     // Single employee information
-    $employee = $wpdb->get_row(
-        $wpdb->prepare( "SELECT * FROM {$wpdb->prefix}ems_form_data WHERE id = %d", $empId), ARRAY_A
+    $employee = $employee_model->get_by_id($empId);
+}
+
+// Save Form data
+if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST["btn_submit"])) {
+    $data = array(
+        'name' => $_POST['name'],
+        'email' => $_POST['email'],
+        'phoneNo' => $_POST['phoneNo'],
+        'gender' => $_POST['gender'],
+        'designation' => $_POST['designation']
     );
-  }
-   
-  // Save Form data
-   if($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST["btn_submit"])){
-
-      // Form submitted
-      global $wpdb;
-
-      $name = sanitize_text_field($_POST['name']);
-      $email = sanitize_text_field($_POST['email']);
-      $phoneNo = sanitize_text_field($_POST['phoneNo']);
-      $gender = sanitize_text_field($_POST['gender']);
-      $designation = sanitize_text_field($_POST['designation']);
-
-      // Action type
-      if(isset($_GET['action'])){
-
-        $empId = $_GET['empId'];
-
-        // Edit operation
-        $wpdb->update("{$wpdb->prefix}ems_form_data", array(
-            "name" => $name,
-            "email" => $email,
-            "phoneNo" => $phoneNo,
-            "gender" => $gender,
-            "designation" => $designation
-        ), array(
-            "id" => $empId
-        ));
-
+    
+    // Action type
+    if(isset($_GET['action']) && $_GET['action'] == "edit") {
+        $result = $employee_model->update($data, $_GET['empId']);
         $message = "Employee updated successfully";
         $status = 1;
-      }else{
-
-        // Add Operation
-        // Insert command
-        $wpdb->insert("{$wpdb->prefix}ems_form_data", array(
-            "name" => $name,
-            "email" => $email,
-            "phoneNo" => $phoneNo,
-            "gender" => $gender,
-            "designation" => $designation
-        ));
-
-        $last_inserted_id = $wpdb->insert_id;
-
-        if($last_inserted_id > 0){
-
+    } else {
+        $result = $employee_model->create($data);
+        
+        if($result) {
             $message = "Employee saved successfully";
             $status = 1;
-        }else{
+        } else {
             $message = "Failed to save an employee";
             $status = 0;
         }
-      }
-   }
+    }
+}
 
+// Rest of your HTML code remains the same
 ?>
 <div class="container">
     <div class="row">

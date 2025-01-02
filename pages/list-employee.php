@@ -1,23 +1,19 @@
 <?php
-   global $wpdb;
-   $message = "";
+$message = "";
+$employee_model = new Employee();
 
-   // Delete Block
-   if($_SERVER['REQUEST_METHOD'] == "POST"){
-
-     if(isset($_POST['emp_del_id']) && !empty($_POST['emp_del_id'])){
-
-        $wpdb->delete("{$wpdb->prefix}ems_form_data", array(
-            "id" => intval($_POST['emp_del_id'])
-        ));
-
+// Delete Block
+if($_SERVER['REQUEST_METHOD'] == "POST") {
+    if(isset($_POST['emp_del_id']) && !empty($_POST['emp_del_id'])) {
+        $employee_model->delete(intval($_POST['emp_del_id']));
         $message = "Employee deleted successfully";
-     }
-   }
+    }
+}
 
-   $employees = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}ems_form_data", ARRAY_A);
+$employees = $employee_model->get_all();
+
+// Rest of your HTML code remains the same
 ?>
-
 <div class="container">
     
         
