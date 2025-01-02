@@ -1,68 +1,94 @@
 <?php
+   global $wpdb;
+   $message = "";
 
-global $wpdb;
+   // Delete Block
+   if($_SERVER['REQUEST_METHOD'] == "POST"){
 
-$employees = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}ems_form_data", ARRAY_A);
+     if(isset($_POST['emp_del_id']) && !empty($_POST['emp_del_id'])){
 
+        $wpdb->delete("{$wpdb->prefix}ems_form_data", array(
+            "id" => intval($_POST['emp_del_id'])
+        ));
 
+        $message = "Employee deleted successfully";
+     }
+   }
+
+   $employees = $wpdb->get_results("SELECT * FROM {$wpdb->prefix}ems_form_data", ARRAY_A);
 ?>
-
-
-
 
 <div class="container">
-  <h2>List Employee</h2>  
-  
-  <div class="panel panel-primary">
-  <div class="panel-heading">List Employee</div>
-  <div class="panel-body">
-  <table class="table" id="tbl-employee">
-    <thead>
-      <tr>
-        <th>#ID</th>
-        <th>#Name</th>
-        <th>#Email</th>
-        <th>#Gender</th>
-        <th>#Designation</th>
-        <th>#Action</th>
+    
+        
+            <h2>List Employee</h2>
 
-      </tr>
-    </thead>
-    <tbody>
+            <div class="panel panel-primary">
+                <div class="panel-heading">List Employee</div>
+                <div class="panel-body">
 
-<?php
+                    <?php
+                    if(!empty($message)){
+                        ?>
+                    <div class="alert alert-success">
+                        <?php echo $message; ?>
+                    </div>
+                    <?php
+                    }
+                    ?>
 
-if(count($employees) > 0){
-  foreach ($employees as $employee) {
-      ?>
-<tr>
-        <td> <?php echo $employee['id'] ?></td>
-        <td><?php echo $employee['name'] ?></td>
-        <td><?php echo $employee['email'] ?></td>
-        <td><?php echo $employee['gender'] ?></td>
-        <td><?php echo $employee['designation'] ?></td>
-        <td>
-            <a href="admin.php?page=employee-system&action=edit&empId=<?php echo $employee['id'] ?>" type="button" class="btn btn-warning">Edit</a>
-            <a href="admin.php?page=employee-system&action=edit&empId=<?php echo $employee['id'] ?>" type="button" class="btn btn-success">Update</a>
+                    <table class="table" id="tbl-employee">
+                        <thead>
+                            <tr>
+                                <th>#ID</th>
+                                <th>#Name</th>
+                                <th>#Email</th>
+                                <th>#Gender</th>
+                                <th>#Designation</th>
+                                <th>#Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php 
+                            if(count($employees) > 0){
 
-            <a href="admin.php?page=list-employee&action=delete&empId=<?php echo $employee['id'] ?>" type="button" class="btn btn-danger"  type="button" class="btn btn-danger">Delete</a>
-            <a href="admin.php?page=employee-system&action=view&empId=<?php echo $employee['id'] ?>" type="button" class="btn btn-primary" type="button" class="btn btn-primary">View</a>
+                                foreach($employees as $employee){
+                                    ?>
+                            <tr>
+                                <td><?php echo $employee['id'] ?></td>
+                                <td><?php echo $employee['name'] ?></td>
+                                <td><?php echo $employee['email'] ?></td>
+                                <td><?php echo ucfirst($employee['gender']); ?></td>
+                                <td><?php echo $employee['designation'] ?></td>
+                                <td class="line">
+                                    <a href="admin.php?page=employee-system&action=edit&empId=<?php echo $employee['id'] ?>"
+                                        class="btn btn-warning">Edit</a>
 
-        </td>
+                                    <form id="frm-delete-employee-<?php echo $employee['id'] ?>" method="post"
+                                        action="<?php echo $_SERVER['PHP_SELF'] ?>?page=list-employee">
 
-      </tr>
+                                        <input type="hidden" name="emp_del_id" value="<?php echo $employee['id'] ?>">
+                                    </form>
 
-      <?php
- } 
-}
-else{
-  echo "No employee found";
-}
-?>
-     
-    </tbody>
-  </table>
+                                    <a href="javascript:void(0)"
+                                        onclick="if(confirm('Are you sure want to delete?')){jQuery('#frm-delete-employee-<?php echo $employee['id'] ?>').submit();}"
+                                        class="btn btn-danger">Delete</a>
 
-  </div>
-</div>
+                                    <a href="admin.php?page=employee-system&action=view&empId=<?php echo $employee['id'] ?>"
+                                        class="btn btn-info">View</a>
+                                </td>
+                            </tr>
+                            <?php
+                                }
+                            }else{
+
+                                echo "No Employee found";
+                            }
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        
+    
 </div>
